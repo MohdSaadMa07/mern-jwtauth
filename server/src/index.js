@@ -20,10 +20,11 @@ app.listen(5000, () => {
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://mern-jwtauth.vercel.app/"],
+    origin: ["http://localhost:5173", "https://mern-jwtauth.vercel.app"],
     credentials: true,
   })
 );
+
 
 
 app.use(bodyParser.json());
