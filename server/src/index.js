@@ -20,13 +20,8 @@ app.listen(5000, () => {
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173", 
-      "http://localhost:5174", 
-      "https://mern-jwtauth.vercel.app",
-      "https://mern-jwtauth-git-main-mohdsaadma07s-projects.vercel.app"
-    ],
-    credentials: true,
+    origin: "http://localhost:5173", // frontend URL
+    credentials: true, // allow cookies/token
   })
 );
 
