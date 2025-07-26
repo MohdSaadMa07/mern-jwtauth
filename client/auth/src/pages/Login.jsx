@@ -18,7 +18,17 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", form);
+      const res = await axios.post(
+        "https://mern-jwtauth-server.onrender.com/api/auth/login",
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: false, // set to true only if your server sets cookies
+        }
+      );
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/dashboard");
@@ -63,8 +73,6 @@ const Login = () => {
             />
           </div>
         </div>
-
-        
 
         <button type="submit" className="submit-btn">Login</button>
 
