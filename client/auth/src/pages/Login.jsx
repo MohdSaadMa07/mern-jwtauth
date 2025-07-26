@@ -1,12 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import "./Login.css";
+import { useNavigate } from "react-router-dom";
+import API from "../api";
+import "./Register.css"; // using same styles for consistency
 
-const Login = () => {
+function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,74 +13,38 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
     try {
-      const res = await axios.post(
-        "https://mern-jwtauth-server.onrender.com/api/auth/login",
-        form,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: false, // set to true only if your server sets cookies
-        }
-      );
-
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate("/dashboard");
+      const res = await API.post("/auth/login", form);
+      localStorage.setItem("token", res.data.token); // Store JWT
+      alert("Login successful!");
+      navigate("/dashboard"); // ✅ redirect on success
     } catch (err) {
-      setError(err.response?.data?.msg || "Something went wrong");
+      alert(err.response?.data?.msg || "Login failed");
     }
   };
 
   return (
-    <div className="login-container">
-      <form onSubmit={handleSubmit} className="form-wrapper">
-        <h2 className="form-title">Login to AuthHub</h2>
-
-        {error && <p className="form-error">{error}</p>}
-
-        <div className="form-group">
-          <label>Email</label>
-          <div className="input-wrapper">
-            <FaEnvelope className="icon" />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label>Password</label>
-          <div className="input-wrapper">
-            <FaLock className="icon" />
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-            />
-          </div>
-        </div>
-
-        <button type="submit" className="submit-btn">Login</button>
-
-        <p className="form-footer">
-          Don't have an account?{" "}
-          <Link to="/register" className="link">Register</Link>
-        </p>
+    <div className="register-container">
+      <form className="register-form" onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+        />
+        <button type="submit">Login</button>
       </form>
     </div>
   );
-};
+}
 
 export default Login;
